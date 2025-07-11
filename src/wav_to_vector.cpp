@@ -1,5 +1,12 @@
 #include "../include/wav_to_vector.h"
 #include <string>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cstdint>
+#include <stdexcept>
+#include <iostream>
+
 struct WavHeader {
     uint8_t     riff[4];        // "RIFF"
     uint32_t    fileSize;       // File size - 8 bytes
@@ -15,13 +22,6 @@ struct WavHeader {
     uint8_t     data[4];        // "data"
     uint32_t    dataSize;       // Raw data size
 };
-
-#include <fstream>
-#include <vector>
-#include <string>
-#include <cstdint>
-#include <stdexcept>
-#include <iostream>
 
 std::vector<int16_t> readWav(std::string fileName, int16_t& samplingRate) {
     std::ifstream file(fileName, std::ios::binary);
