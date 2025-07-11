@@ -1,4 +1,4 @@
-OBJETOS = build/DFT.o build/wav_to_vector.o #build/RRN.o
+OBJETOS = build/audioProcessing.o build/wav_to_vector.o #build/RRN.o
 
 
 CXX = g++
@@ -7,8 +7,8 @@ OPCIONES = -g -Wall -fopenmp
 ejec: $(OBJETOS) main.cpp | build
 	$(CXX) $(OPCIONES) $(OBJETOS) main.cpp -o build/ejec
 	
-build/DFT.o: include/DFT.h src/DFT.cpp | build
-	$(CXX) $(OPCIONES) -c src/DFT.cpp -o build/DFT.o
+build/audioProcessing.o: include/audioProcessing.h src/audioProcessing.cpp | build
+	$(CXX) $(OPCIONES) -c src/audioProcessing.cpp -o build/audioProcessing.o
 
 build/wav_to_vector.o: include/wav_to_vector.h src/wav_to_vector.cpp | build
 	$(CXX) $(OPCIONES) -c src/wav_to_vector.cpp -o build/wav_to_vector.o

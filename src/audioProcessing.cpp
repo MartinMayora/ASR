@@ -1,6 +1,4 @@
-#include "../include/DFT.h"
-#include <mutex>
-#include <omp.h>
+#include "../include/audioProcessing.h"
 
 std::mutex mtx;
 std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, int frameSize, int hopSize) {

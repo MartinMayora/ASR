@@ -1,4 +1,4 @@
-#include "./include/DFT.h"
+#include "./include/audioProcessing.h"
 #include "./include/wav_to_vector.h"
 
 int main(){
