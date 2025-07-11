@@ -1,11 +1,4 @@
 #include "../include/wav_to_vector.h"
-#include <string>
-#include <fstream>
-#include <vector>
-#include <string>
-#include <cstdint>
-#include <stdexcept>
-#include <iostream>
 
 struct WavHeader {
     uint8_t     riff[4];        // "RIFF"

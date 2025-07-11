@@ -1,7 +1,10 @@
-#include <iostream>
+#include <string>
 #include <fstream>
 #include <vector>
-#include <cmath>
+#include <string>
+#include <cstdint>
+#include <stdexcept>
+#include <iostream>
 
 
 std::vector<int16_t> readWav(std::string fileName,int16_t &samplingRate);
