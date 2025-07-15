@@ -3,10 +3,10 @@
 
 int main(){
     std::string test = "test.wav";
-    int16_t samplingRate;
+    int32_t samplingRate;
     std::vector<int16_t> wav;
     wav = readWav(test, samplingRate);
-
+    std::cout << samplingRate << "   "; 
     std::cout<< wav.size() << "\n";
     std::vector<std::vector<double>> frames = frameSignal(wav);
     std::vector<std::vector<double>> powerSpect; //could be optimized, one vector with strides
@@ -18,9 +18,20 @@ int main(){
         auto pSpecturm = powerSpectrum(dft);
         powerSpect.push_back(pSpecturm);
     }
-    int nMels = 40;
-    std::vector<std::vector<double>> filterBank = createMelFilterbank(samplingRate, powerSpect.size(), nMels);
-    std::cout<< "\n size of filterBank[0]: " << filterBank[0].size();
+    int nMels = 30;
+    std::vector<std::vector<double>> filterBank = createMelFilterbank(samplingRate, powerSpect[0].size(), nMels);
+    std::cout << "Mel filter [12]:\n";
+for (int k = 0; k < filterBank[12].size(); ++k) {
+            if(filterBank[12][k]!=0){
+        std::cout << "Bin " << k << ": " << filterBank[12][k] << "\n";}
+}
+    std::cout << "Mel filter [22]]:\n";
+for (int k = 0; k < filterBank[22].size(); ++k) {
+        if(filterBank[22][k]!=0){
+        std::cout << "Bin " << k << ": " << filterBank[22][k] << "\n";
+        }
+}
+    std::cout << "\n";
 
     return 0;
 }

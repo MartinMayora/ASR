@@ -6,7 +6,7 @@
 #include <algorithm>
 #include "../include/wav_to_vector.h"
 
-std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, u_int16_t frameSize = 400,  int hopSize = 160 );
+std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, u_int16_t frameSize = 1024,  int hopSize = 512 );
 
 std::vector<double> hammingWindowing(std::vector<double> x);
 

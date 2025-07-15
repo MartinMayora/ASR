@@ -16,7 +16,7 @@ struct WavHeader {
     uint32_t    dataSize;       // Raw data size
 };
 
-std::vector<int16_t> readWav(std::string fileName, int16_t& samplingRate) {
+std::vector<int16_t> readWav(std::string fileName, int32_t& samplingRate) {
     std::ifstream file(fileName, std::ios::binary);
     if (!file) {
         throw std::runtime_error("Cannot open WAV file.");

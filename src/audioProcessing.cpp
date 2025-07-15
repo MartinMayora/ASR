@@ -58,11 +58,23 @@ std::vector<std::complex<double>> FFT(std::vector<double> x) {
     return result;
 }
 
-std::vector<std::complex<double>> DFT(std::vector<double> x){
-    int m = x.size();
-    if ((m & (m - 1)) == 0) {  // Check if n is power of 2
-        return FFT(x);
+std::vector<double> padding(std::vector<double> x){
+    int i=1;
+    while (i<x.size()){
+        i=i*2;
     }
+    std::vector<double> padding(i, 0.0);
+    std::copy(x.begin(), x.end(), padding.begin());
+    return padding;
+}
+std::vector<std::complex<double>> DFT(std::vector<double> x){
+    std::vector<double> padded = padding(x);
+    int m = padded.size();
+    if ((m & (m - 1)) == 0) {  // Check if n is power of 2
+        std::cout << "using FFT \n";
+        return FFT(padded);
+    }
+    //NORMAL DFT IF IT CAN NOT DO FFT
     double n = x.size();
     double k = n;
 
@@ -83,12 +95,14 @@ std::vector<std::complex<double>> DFT(std::vector<double> x){
     return toReturn;
 };
 std::vector<double> powerSpectrum( std::vector<std::complex<double>> dft){
+    int nPositive = dft.size() / 2 + 1;
     std::vector<double> toReturn;
-    toReturn.reserve(dft.size());
-    for(auto& i:dft){
-        double toAdd = std::norm(i);
-        toReturn.push_back(toAdd);
+    toReturn.reserve(nPositive);
+
+    for (int i = 0; i < nPositive; ++i) {
+        toReturn.push_back(std::norm(dft[i]));
     }
+
     return toReturn;
 }
 
@@ -101,11 +115,11 @@ double mel2hz(double mel){
     return 700*(pow(10,mel/2595)-1);
 }
 
-std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nDFT, int nMels){
+std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nPowerSpecturm, int nMels){
     double melMin = 0;
     double melMax = hz2mel(sampleRate/2);
 
-    std::vector<std::vector<double>> filterBank(nMels, std::vector(nDFT, 0.0)); //initialize the structure
+    std::vector<std::vector<double>> filterBank(nMels, std::vector(nPowerSpecturm, 0.0)); //initialize the structure
 
     std::vector<double> melPoints(nMels+2);
     for (int i = 0; i < nMels + 2; ++i) {
@@ -117,17 +131,26 @@ std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nDFT, i
         hzPoints[j] = mel2hz(melPoints[j]);
     }
 
-    std::vector<int> binIndices(nMels+2);
-    for(int k=0; k<nMels+2; k++){
-        binIndices[k]= int(hzPoints[k] * nDFT / sampleRate);
-        binIndices[k]= std::min(std::max(binIndices[k], int(melMin)), int(nDFT / 2 + 1));
+    std::vector<int> binIndices(nMels + 2);
+    for (int k = 0; k < nMels + 2; k++) {
+        binIndices[k] = int(hzPoints[k] * nPowerSpecturm / sampleRate);
+        binIndices[k] = std::min(std::max(binIndices[k], 0), nPowerSpecturm - 1);
     }
 
     for (int m = 1; m <= nMels; ++m) {
         int left = binIndices[m - 1];
         int center = binIndices[m];
         int right = binIndices[m + 1];
+            std::cout << "Filter " << m - 1
+              << " | left: " << left
+              << " center: " << center
+              << " right: " << right << "\n";
 
+    // skip if they are not increasing
+    if (left == center || center == right || left == right) {
+        std::cout << "⚠️ Skipped: triangle collapsed (indices are equal)\n";
+        continue;
+    }
         for (int k = left; k < center; ++k) {
             filterBank[m - 1][k] = static_cast<double>(k - left) / (center - left);
         }

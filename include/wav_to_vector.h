@@ -7,4 +7,4 @@
 #include <iostream>
 
 
-std::vector<int16_t> readWav(std::string fileName,int16_t &samplingRate);
+std::vector<int16_t> readWav(std::string fileName,int32_t &samplingRate);
