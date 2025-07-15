@@ -20,8 +20,7 @@ int main(){
     }
     int nMels = 30;
     std::vector<std::vector<double>> filterBank = createMelFilterbank(samplingRate, powerSpect[0].size(), nMels);
-
-    std::cout << "\n";
-
+    std::vector<std::vector<double>> melEnergies = computeMelEnergies(powerSpect, filterBank);
+    
     return 0;
 }

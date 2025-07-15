@@ -19,3 +19,5 @@ double mel2hz(double mel);
 double hz2mel(double hz);
 
 std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nDFT, int nMels);
+
+std::vector<std::vector<double>> computeMelEnergies(std::vector<std::vector<double>> powerSpectrum, std::vector<std::vector<double>> filterBank);

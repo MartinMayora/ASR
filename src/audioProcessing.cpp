@@ -59,7 +59,7 @@ std::vector<std::complex<double>> FFT(std::vector<double> x) {
 }
 
 std::vector<double> padding(std::vector<double> x){
-    int i=1;
+    u_int i=1;
     while (i<x.size()){
         i=i*2;
     }
@@ -154,4 +154,19 @@ std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nPowerS
     }
 
     return filterBank;
+}
+
+std::vector<std::vector<double>> computeMelEnergies(std::vector<std::vector<double>> powerSpectrum, std::vector<std::vector<double>> filterBank) {
+    int nFrames = powerSpectrum.size();
+    int nMels = filterBank.size();
+    std::vector<std::vector<double>> melEnergies(nFrames, std::vector<double>(nMels, 0.0));
+ 
+    for (int frame = 0; frame < nFrames; ++frame) {
+        for (int m = 0; m < nMels; ++m) {
+            for (int bin = 0; bin < powerSpectrum[frame].size(); ++bin) {
+                melEnergies[frame][m] += filterBank[m][bin] * powerSpectrum[frame][bin];
+            }
+        }
+    }
+    return melEnergies;
 }
