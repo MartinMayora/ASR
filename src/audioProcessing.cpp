@@ -71,7 +71,6 @@ std::vector<std::complex<double>> DFT(std::vector<double> x){
     std::vector<double> padded = padding(x);
     int m = padded.size();
     if ((m & (m - 1)) == 0) {  // Check if n is power of 2
-        std::cout << "using FFT \n";
         return FFT(padded);
     }
     //NORMAL DFT IF IT CAN NOT DO FFT
@@ -141,14 +140,9 @@ std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nPowerS
         int left = binIndices[m - 1];
         int center = binIndices[m];
         int right = binIndices[m + 1];
-            std::cout << "Filter " << m - 1
-              << " | left: " << left
-              << " center: " << center
-              << " right: " << right << "\n";
 
     // skip if they are not increasing
     if (left == center || center == right || left == right) {
-        std::cout << "⚠️ Skipped: triangle collapsed (indices are equal)\n";
         continue;
     }
         for (int k = left; k < center; ++k) {

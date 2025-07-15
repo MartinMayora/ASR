@@ -20,17 +20,7 @@ int main(){
     }
     int nMels = 30;
     std::vector<std::vector<double>> filterBank = createMelFilterbank(samplingRate, powerSpect[0].size(), nMels);
-    std::cout << "Mel filter [12]:\n";
-for (int k = 0; k < filterBank[12].size(); ++k) {
-            if(filterBank[12][k]!=0){
-        std::cout << "Bin " << k << ": " << filterBank[12][k] << "\n";}
-}
-    std::cout << "Mel filter [22]]:\n";
-for (int k = 0; k < filterBank[22].size(); ++k) {
-        if(filterBank[22][k]!=0){
-        std::cout << "Bin " << k << ": " << filterBank[22][k] << "\n";
-        }
-}
+
     std::cout << "\n";
 
     return 0;
