@@ -1,11 +1,11 @@
 #include "../include/audioProcessing.h"
 
 std::mutex mtx;
-std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, int frameSize, int hopSize) {
+std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, u_int16_t frameSize, int hopSize) {
     std::vector<std::vector<double>> frames;
     frames.reserve(audio.size() / hopSize);
     size_t numFrames = (audio.size() >= frameSize) ? (audio.size() - frameSize) / hopSize + 1 : 0;
-    #pragma omp parallel for
+#pragma omp parallel for
     for (size_t idx = 0; idx< numFrames; ++idx) {
         size_t i = idx*hopSize;
         std::vector<double> frame(audio.begin() + i, audio.begin() + i + frameSize);
@@ -14,7 +14,6 @@ std::vector<std::vector<double>> frameSignal(const std::vector<int16_t>& audio, 
 }
     return frames;
 }
-
 
 
 std::vector<double> hammingWindowing(std::vector<double> x){
@@ -83,3 +82,59 @@ std::vector<std::complex<double>> DFT(std::vector<double> x){
     }
     return toReturn;
 };
+std::vector<double> powerSpectrum( std::vector<std::complex<double>> dft){
+    std::vector<double> toReturn;
+    toReturn.reserve(dft.size());
+    for(auto& i:dft){
+        double toAdd = std::norm(i);
+        toReturn.push_back(toAdd);
+    }
+    return toReturn;
+}
+
+
+double hz2mel(double hz){
+    return 1127 * log(1+(hz)/700);
+}
+
+double mel2hz(double mel){
+    return 700*(pow(10,mel/2595)-1);
+}
+
+std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nDFT, int nMels){
+    double melMin = 0;
+    double melMax = hz2mel(sampleRate/2);
+
+    std::vector<std::vector<double>> filterBank(nMels, std::vector(nDFT, 0.0)); //initialize the structure
+
+    std::vector<double> melPoints(nMels+2);
+    for (int i = 0; i < nMels + 2; ++i) {
+        melPoints[i] = melMin + i * (melMax - melMin) / (nMels + 1);
+    }
+    
+    std::vector<double> hzPoints(nMels+2);
+    for (int j=0; j< nMels+2; j++){
+        hzPoints[j] = mel2hz(melPoints[j]);
+    }
+
+    std::vector<int> binIndices(nMels+2);
+    for(int k=0; k<nMels+2; k++){
+        binIndices[k]= int(hzPoints[k] * nDFT / sampleRate);
+        binIndices[k]= std::min(std::max(binIndices[k], int(melMin)), int(nDFT / 2 + 1));
+    }
+
+    for (int m = 1; m <= nMels; ++m) {
+        int left = binIndices[m - 1];
+        int center = binIndices[m];
+        int right = binIndices[m + 1];
+
+        for (int k = left; k < center; ++k) {
+            filterBank[m - 1][k] = static_cast<double>(k - left) / (center - left);
+        }
+        for (int k = center; k < right; ++k) {
+            filterBank[m - 1][k] = 1.0 - static_cast<double>(k - center) / (right - center);
+        }
+    }
+
+    return filterBank;
+}
