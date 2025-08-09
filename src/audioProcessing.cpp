@@ -125,7 +125,7 @@ std::vector<std::vector<double>> createMelFilterbank(int sampleRate, int nPowerS
         melPoints[i] = melMin + i * (melMax - melMin) / (nMels + 1);
     }
     
-    std::vector<double> hzPoints(nMels+2);
+    std::vector<double> hzPoints(nMels+2);  
     for (int j=0; j< nMels+2; j++){
         hzPoints[j] = mel2hz(melPoints[j]);
     }
