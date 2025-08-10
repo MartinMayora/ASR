@@ -9,20 +9,14 @@ public:
     int output_size;
     int sequence_length;
 
-    // Parameters
-    Matrix Wxh, Whh, Why;
-    Vector bh, by;
-
-    // State
+    //W input weight matrix, U hidden layer weight matrix, V output layer weight matrix
+    Matrix W, U, V; 
+    //input vector
+    Vector x;
+    //output vector
+    Vector y;
+    //hidden state
     Vector h;
-
-    // Hyperparameters
-    double learning_rate;
-    std::string activation;
-
-    // Buffers for training
-    std::vector<Vector> hidden_states;
-    std::vector<Vector> outputs;
 
     // Constructor
     RNN(int input_size, int hidden_size, int output_size, int sequence_length);

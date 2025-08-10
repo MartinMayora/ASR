@@ -1,5 +1,7 @@
-
+#include <iostream>
 #include <vector>
+
+#include "./matrix.h"
 
 class Vector {
 private:
@@ -11,5 +13,6 @@ public:
 
     double& operator[](int i) { return data[i]; }
     const double& operator[](int i) const { return data[i]; }
-
+    void add(Vector vectorToAdd);
+    void multiplyMatrix(Matrix matrix);
 };
