@@ -11,7 +11,7 @@ void Vector::add(Vector vectorToAdd){
 
 void Vector::multiplyMatrix(Matrix A) {
     if(this->size() != A.rows){
-        throw std::invalid_argument("Multiplication vector - matrix invalid sizes")
+        throw std::invalid_argument("Multiplication vector - matrix invalid sizes");
     }
     std::vector<double> result(A.rows, 0.0);
     for (int i = 0; i < A.rows; ++i) {

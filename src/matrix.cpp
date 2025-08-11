@@ -5,9 +5,18 @@ void Matrix::fill(double value) {
     std::fill(data.begin(), data.end(), value);
 }
 
+Matrix Matrix::giveCopy() {
+    Matrix copy(rows, cols);
+    copy.data = data;
+    return copy;
+}
 
 void Matrix::apply(const std::function<double(double)>& func) {
     for (auto &x : data) x = func(x);
+}
+
+void Matrix::multiplyConstant(double h){
+    Matrix::apply([h](double x){return x*h;});
 }
 
 static Matrix multiply(const Matrix& A, const Matrix& B) {

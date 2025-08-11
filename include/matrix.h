@@ -16,17 +16,25 @@ public:
     double& operator()(int r, int c) { return data[r * cols + c]; }
     const double& operator()(int r, int c) const { return data[r * cols + c]; }
 
+    // Gives copy of the matrix
+    Matrix giveCopy(){
+
+    }
+    
     // Fill with a value
     void fill(double value);
 
     // Apply function element-wise
     void apply(const std::function<double(double)>& func);
 
+    //  Multiplies matrix by constant
+    void multiplyConstant(double h);
+
     // Matrix-matrix multiplication
     static Matrix multiply(const Matrix& A, const Matrix& B);
 
     // Matrix-vector multiplication
-    static std::vector<double> multiply(const Matrix& A, const std::vector<double>& v);
+    static std::vector<double> multiply(const Matrix& A, const Vector& v);
 
     // Add another matrix
     void add(const Matrix& other);

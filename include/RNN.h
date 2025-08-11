@@ -1,3 +1,4 @@
+#include <functional>
 #include "../include/matrix.h"
 #include "../include/vector.h"
 
@@ -15,8 +16,8 @@ public:
     Vector x;
     //output vector
     Vector y;
-    //hidden state
-    Vector h;
+    //hidden states
+    std::vector<Vector> h;
 
     // Constructor
     RNN(int input_size, int hidden_size, int output_size, int sequence_length);
@@ -26,6 +27,7 @@ public:
 
     void tanh(Vector& v);
 
+    void softmax(Vector& v);
     // Backward prop 
     void backward(const std::vector<Vector> &inputs, const std::vector<Vector> &targets);
 
