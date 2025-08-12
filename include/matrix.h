@@ -17,9 +17,7 @@ public:
     const double& operator()(int r, int c) const { return data[r * cols + c]; }
 
     // Gives copy of the matrix
-    Matrix giveCopy(){
-
-    }
+    Matrix giveCopy();
     
     // Fill with a value
     void fill(double value);
@@ -34,7 +32,7 @@ public:
     static Matrix multiply(const Matrix& A, const Matrix& B);
 
     // Matrix-vector multiplication
-    static std::vector<double> multiply(const Matrix& A, const Vector& v);
+    static Vector multiply(const Matrix& A, const Vector& v);
 
     // Add another matrix
     void add(const Matrix& other);

@@ -33,12 +33,17 @@ static Matrix multiply(const Matrix& A, const Matrix& B) {
     return C;
 }
 
-static std::vector<double> multiply(const Matrix& A, const Vector v) {
-    std::vector<double> result(A.rows, 0.0);
-    for (int i = 0; i < A.rows; ++i) {
-        for (int j = 0; j < A.cols; ++j) {
-            result[i] += A(i, j) * v[j];
+static Vector multiply(const Matrix& A, const Vector v) {
+    if (A.cols != v.size()) {
+        throw std::runtime_error("Matrix Vector dimension mismatch");
+    }
+    Vector result(A.rows);
+    for (int r = 0; r < A.rows; r++) {
+        double sum = 0.0;
+        for (int c = 0; c < A.cols; c++) {
+            sum += A(r, c) * v[c];
         }
+        result[r] = sum;
     }
     return result;
 }

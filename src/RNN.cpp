@@ -22,27 +22,23 @@ void RNN::softmax(Vector& vector){
 std::vector<Vector> RNN::forward(const std::vector<Vector> &inputs){
     this->h[0]=0;
     std::vector<Vector> y;
-    //NOT CLEAN CODE, CHANGE LATER ON PLS!
+    y.reserve(inputs.size());
     for(int i = 1; i<inputs.size(); i++){
         // hi = g(Uhi-1 + Wxi)
-        Vector z(this->U.rows);
-        std::vector r = this->U.multiply(U,this->h[i-1]);
-        Vector q(r.size());
-        q.data = r;
-        z.add(q);
-        r =  this->W.multiply(W, inputs[i]);
-        Vector q(r.size());
-        q.data = r;
-        z.add(q);
+        Vector z = Matrix::multiply(U, h[i - 1]);
+        z.add(Matrix::multiply(W, inputs[i]));
         RNN::tanh(z);
-        this->h[i]=z;
+        h[i] = z;
 
-        //yi = f(Vhi)
-        std::vector 😭 = this->V.multiply(V, this->h[i]);
-        Vector k(😭.size());
-        k.data = 😭;
+        // yi = softmax(V * hi)
+        Vector k = Matrix::multiply(V, h[i]);
         RNN::softmax(k);
-        y[i]=k;
+        y[i] = k;
     }
     return y;
 }
+
+void RNN::backward(const std::vector<Vector> &inputs, const std::vector<Vector> &targets){
+    
+}
+

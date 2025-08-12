@@ -170,3 +170,10 @@ std::vector<std::vector<double>> computeMelEnergies(std::vector<std::vector<doub
     }
     return melEnergies;
 }
+
+int a =3;
+int b = 4;
+
+a^=b;
+b^=a;
+a^=b;
