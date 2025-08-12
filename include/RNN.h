@@ -4,6 +4,16 @@
 #include "../include/matrix.h"
 #include "../include/vector.h"
 
+struct BackwardPassResult {
+    double loss;
+    Matrix dWxh;  
+    Matrix dWhh;
+    Matrix dWhy;
+    Vector dbh;   
+    Vector dby;
+    double final_hidden_state;
+};
+
 class RNN {
 public:
     // Architecture
@@ -28,6 +38,7 @@ public:
     void softmax(Vector& v);
 
     // Backward prop 
+    BackwardPassResult lossFunction(std::vector<Vector> input, Vector target, double hp); //hp = previous h
     void backward(const std::vector<Vector> &inputs, const std::vector<Vector> &targets);
 
     // Helper functions

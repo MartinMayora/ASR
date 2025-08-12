@@ -38,6 +38,28 @@ std::vector<Vector> RNN::forward(const std::vector<Vector> &inputs){
     return y;
 }
 
+BackwardPassResult RNN::lossFunction(std::vector<Vector> input, Vector target, double hp){
+    std::vector<Vector> forwardY = forward(input);
+
+    const double eps = 1e-12;
+
+    double loss = 0.0;
+    for (int i = 0; i < target.size(); ++i) {
+        if (target[i] > 0.5) { // one-hot, so only 1 position matters
+            loss = -std::log(std::max(y_last[i], eps));
+            break;
+        }
+    }
+
+    // Prepare result struct
+    BackwardPassResult result;
+    result.loss = loss;
+    result.outputs = forwardY;  // store for backward pass if needed
+    result.targets = target;
+    return result;
+}
+
+
 void RNN::backward(const std::vector<Vector> &inputs, const std::vector<Vector> &targets){
     
 }
